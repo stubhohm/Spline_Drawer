@@ -8,7 +8,7 @@ def get_user_input(pygame):
     for event in pygame.event.get():
             if event.type == pygame.KEYUP:
                 key_released = event.key
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or key_released == pygame.K_ESCAPE:
                 run = False
 
     key_pressed = pygame.key.get_pressed()

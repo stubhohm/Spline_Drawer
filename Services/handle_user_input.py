@@ -190,7 +190,7 @@ def set_edit_mode(keys, user_input, pygame):
         user_input.edit_mode = EditMode.Delete
 
 def set_print_mode(keys, user_input, pygame):
-    if keys.released == pygame.K_o:
+    if keys.released == pygame.K_m:
         if user_input.print_mode == PrintMode.Relative:
             user_input.print_mode = PrintMode.Absolute
         else:

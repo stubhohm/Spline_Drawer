@@ -30,7 +30,7 @@ def display_edit_mode(user_input, font, Window):
         text += " Selection"
     if user_input.edit_mode == EditMode.Delete:
         text += " Delete"
-    draw_text(Window.display, text, font, WHITE, "right", "centered", Window.width, Window.height * 1 /32)
+    draw_text(Window.display, text, font, WHITE, "right", "top", Window.width, 0)
 
 def display_selection_mode(user_input, font, Window):
     text = "Selction Mode:"
@@ -42,7 +42,7 @@ def display_selection_mode(user_input, font, Window):
         text += " Segment"
     if user_input.selection_mode == SelectionMode.spline:
         text += " Spline"
-    draw_text(Window.display, text, font, WHITE, "right", "centered", Window.width, Window.height * 2 /32)
+    draw_text(Window.display, text, font, WHITE, "right", "top", Window.width, Window.height * 1 /64)
 
 def display_print_mode(user_input, font, Window):
     text = "Print Mode:"
@@ -50,7 +50,7 @@ def display_print_mode(user_input, font, Window):
         text += " Relative"
     elif user_input.print_mode == PrintMode.Absolute:
         text += " Absolute"
-    draw_text(Window.display, text, font, WHITE, "right", "centered", Window.width, Window.height * 3 /32)
+    draw_text(Window.display, text, font, WHITE, "right", "top", Window.width, Window.height * 2 /64)
 
 def display_edit_hotkeys(Window, font):
     text = "Show Hot Keys: H"
@@ -91,6 +91,16 @@ def display_selection_hotkeys(Window, font):
         text = "Spline: r"
         draw_text(Window.display, text, font, WHITE, "left", "centered", 0 , Window.height * i /64)
 
+def display_print_hotkeys(Window, font):
+    text = ""
+    if Window.hot_keys:
+        i = 4
+        text = "Toggle Print Mode: M"
+        draw_text(Window.display, text, font, WHITE, "right", "centered", Window.width , Window.height * i /64)
+        i += 1
+        text = "Print to Terminal: P"
+        draw_text(Window.display, text, font, WHITE, "right", "centered", Window.width , Window.height * i /64)
+
 def render_window(pygame, Window, splines, user_input):
     Window.draw_window()
     for spline in splines:
@@ -101,10 +111,9 @@ def render_window(pygame, Window, splines, user_input):
     display_selection_mode(user_input, font, Window)
     display_edit_hotkeys(Window, font)
     display_selection_hotkeys(Window, font)
+    display_print_hotkeys(Window, font)
     display_print_mode(user_input, font, Window)
     pygame.display.update()
-
-
 
 def main():
     a = 0
