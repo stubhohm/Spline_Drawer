@@ -10,3 +10,7 @@ class EditMode(Enum):
     Add = 1
     Select = 2
     Delete = 3
+
+class PrintMode (Enum):
+    Relative = 1
+    Absolute = 2

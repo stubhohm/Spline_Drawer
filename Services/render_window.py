@@ -1,7 +1,7 @@
 from Classes.window import Window
 from Classes.spline import Spline
 from Classes.segments import Segment
-from Classes.enums import EditMode, SelectionMode
+from Classes.enums import EditMode, SelectionMode, PrintMode
 from Fonts.FONTS import get_text_font, get_menu_font, get_event_font
 from Constants.CONSTANTS import *
 
@@ -43,6 +43,14 @@ def display_selection_mode(user_input, font, Window):
     if user_input.selection_mode == SelectionMode.spline:
         text += " Spline"
     draw_text(Window.display, text, font, WHITE, "right", "centered", Window.width, Window.height * 2 /32)
+
+def display_print_mode(user_input, font, Window):
+    text = "Print Mode:"
+    if user_input.print_mode == PrintMode.Relative:
+        text += " Relative"
+    elif user_input.print_mode == PrintMode.Absolute:
+        text += " Absolute"
+    draw_text(Window.display, text, font, WHITE, "right", "centered", Window.width, Window.height * 3 /32)
 
 def display_edit_hotkeys(Window, font):
     text = "Show Hot Keys: H"
@@ -92,8 +100,8 @@ def render_window(pygame, Window, splines, user_input):
     display_edit_mode(user_input, font, Window)
     display_selection_mode(user_input, font, Window)
     display_edit_hotkeys(Window, font)
-    display_edit_hotkeys(Window, font)
     display_selection_hotkeys(Window, font)
+    display_print_mode(user_input, font, Window)
     pygame.display.update()
 
 

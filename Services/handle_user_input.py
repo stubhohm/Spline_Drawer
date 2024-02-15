@@ -1,4 +1,4 @@
-from Classes.enums import EditMode, SelectionMode
+from Classes.enums import EditMode, SelectionMode, PrintMode
 from Classes.input_object import InputObject
 from Classes.segments import Segment
 
@@ -168,19 +168,19 @@ def switch_on_edit_mode(mouse, keys,  user_input, splines, pygame):
     elif user_input.edit_mode == EditMode.Delete:
         handle_delete(mouse, keys, user_input, splines, pygame) 
 
-def set_selection_mode(mouse, keys, user_input, pygame):
-    if user_input.edit_mode == EditMode.Add:
-        return
+def set_selection_mode(keys, user_input, pygame):
     if keys.released == pygame.K_q:
         user_input.selection_mode = SelectionMode.control_points
+        user_input.edit_mode = EditMode.Select
     if keys.released == pygame.K_w:
         user_input.selection_mode = SelectionMode.end_points
+        user_input.edit_mode = EditMode.Select
     if keys.released == pygame.K_e:
         user_input.selection_mode = SelectionMode.segment
     if keys.released == pygame.K_r:
         user_input.selection_mode = SelectionMode.spline
 
-def set_edit_mode(mouse, keys, user_input, pygame):
+def set_edit_mode(keys, user_input, pygame):
     if keys.released == pygame.K_a:
         user_input.edit_mode = EditMode.Add
         user_input.selection_mode = SelectionMode.end_points
@@ -189,10 +189,36 @@ def set_edit_mode(mouse, keys, user_input, pygame):
     if keys.released == pygame.K_d:
         user_input.edit_mode = EditMode.Delete
 
-def branch_input(mouse, keys, user_input, splines, pygame):
+def set_print_mode(keys, user_input, pygame):
+    if keys.released == pygame.K_o:
+        if user_input.print_mode == PrintMode.Relative:
+            user_input.print_mode = PrintMode.Absolute
+        else:
+            user_input.print_mode = PrintMode.Relative
+
+def execute_print(user_input, splines, window):
+    w = 1
+    h = 1
+    trunc = 4
+    if user_input.print_mode == PrintMode.Relative:
+        w = window.width
+        h = window.height
+    print("Format (Start point),(Start Control), (End point), (End Control)")
+    for spline in splines:
+        for segment in spline.segments:
+            print(f"({round(segment.start_point[0] / w, trunc)},{round(segment.start_point[1] / h, trunc)}),"
+                f"({round(segment.start_control_point[0] / w, trunc)},{round(segment.start_control_point[1] / h, trunc)}),"
+                f"({round(segment.end_point[0] / w, trunc)},{round(segment.end_point[1] / h, trunc)}),"
+                f"({round(segment.end_control_point[0] / w, trunc)},{round(segment.end_control_point[0] / h, trunc)}),")
+
+def branch_input(mouse, keys, user_input, splines, pygame, window):
     switch_on_edit_mode(mouse, keys, user_input, splines, pygame)
-    set_selection_mode(mouse, keys, user_input, pygame)
-    set_edit_mode(mouse, keys, user_input, pygame)
+    set_selection_mode(keys, user_input, pygame)
+    set_edit_mode(keys, user_input, pygame)
+    set_print_mode(keys, user_input, pygame)
+    if keys.released == pygame.K_p:
+        execute_print(user_input, splines, window)
+
 
 def check_hot_key_toggle(window, keys, pygame):
     if keys.released == pygame.K_h:
@@ -200,6 +226,7 @@ def check_hot_key_toggle(window, keys, pygame):
             window.hot_keys = False
         else:
             window.hot_keys = True
+
 
 def snap_spline_start_to_ends(splines):
     for spline in splines:
@@ -251,7 +278,7 @@ def handle_user_input(pygame, user_input, window, splines, math):
     mouse = parse_mouse(user_input)
     keys = parse_keyboard(user_input)
     check_hot_key_toggle(window, keys, pygame)
-    branch_input(mouse, keys, user_input, splines, pygame)
+    branch_input(mouse, keys, user_input, splines, pygame, window)
     snap_spline_start_to_ends(splines)
     snap_control_to_opposing_angles(splines, math)
     user_input.previous_input.mouse = mouse

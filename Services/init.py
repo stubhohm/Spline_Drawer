@@ -4,7 +4,7 @@ from Classes.segments import Segment
 from Classes.spline import Spline
 from Classes.user_input import UserInput
 from Classes.input_object import InputObject
-from Classes.enums import EditMode, SelectionMode
+from Classes.enums import EditMode, SelectionMode, PrintMode
 from Fonts.FONTS import init_fonts
 
 def init(pygame):
@@ -13,7 +13,7 @@ def init(pygame):
     pygame.mouse.set_visible(True)
     clock = pygame.time.Clock()
     run = True
-    user_input = UserInput(EditMode.Select, SelectionMode.control_points, None, InputObject(), InputObject())
+    user_input = UserInput(EditMode.Select, SelectionMode.control_points,None, PrintMode.Relative, InputObject(), InputObject())
     splines = []
     window = Window()
     print(window.width)
