@@ -1,4 +1,5 @@
 import pygame
+import math
 from Constants.CONSTANTS import *
 from Services.init import init
 from Services.handle_user_input import handle_user_input
@@ -12,7 +13,7 @@ def main():
     while run:
         clock.tick(FPS)
         user_input.current_input, run = get_user_input(pygame)  
-        handle_user_input(pygame, user_input, window, splines)
+        handle_user_input(pygame, user_input, window, splines, math)
         render_window(pygame, window, splines, user_input)
 
 

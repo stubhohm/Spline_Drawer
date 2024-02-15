@@ -8,7 +8,7 @@ def add_segment(splines, user_input, pos):
             if spline.segments[0].selected_end != 1 or spline.segment[-1].selected_end != 2:
                 continue
         if spline.segments[0] != user_input.selected_element and spline.segments[-1] != user_input.selected_element:
-            continue
+          continue
         if spline.segments[0].selected_end == 1:
             o_p = spline.segments[0].start_point
             o_c = spline.segments[0].start_control_point
@@ -201,11 +201,60 @@ def check_hot_key_toggle(window, keys, pygame):
         else:
             window.hot_keys = True
 
-def handle_user_input(pygame, user_input, window, splines):
+def snap_spline_start_to_ends(splines):
+    for spline in splines:
+        for i in range(len(spline.segments) - 1):
+            if not i + 1 < len(spline.segments):
+                return
+            if spline.segments[i + 1].selected_end:
+                spline.segments[i].end_point = spline.segments[i + 1].start_point
+            else:
+                spline.segments[i + 1].start_point = spline.segments[i].end_point
+
+def find_opposite_point(point_1, origin, point_2, math):
+    x_1, y_1 = point_1[0], point_1[1]
+    origin_x, origin_y = origin[0], origin[1]
+    x_2, y_2 = point_2[0], point_2[1]
+
+    # Calculate the vector components from origin to point_1
+    vec_x = x_1 - origin_x
+    vec_y = y_1 - origin_y
+
+    # Calculate the angle of the vector
+    angle = math.atan2(vec_y, vec_x)
+
+    # Calculate the coordinates of the second point using the opposite angle
+    x_3 = origin_x + math.cos(angle + math.pi) * math.sqrt(vec_x**2 + vec_y**2)
+    y_3 = origin_y + math.sin(angle + math.pi) * math.sqrt(vec_x**2 + vec_y**2)
+
+    return [x_3, y_3]
+
+def snap_control_to_opposing_angles(splines, math):
+    for spline in splines:
+        for i in range(len(spline.segments) - 1):
+            if not i + 1 < len(spline.segments):
+                return
+            if spline.segments[i + 1].selected_end:
+                spline.segments[i].end_control_point = find_opposite_point(
+                    spline.segments[i + 1].start_control_point, 
+                    spline.segments[i + 1].start_point, 
+                    spline.segments[i].end_control_point,
+                    math)
+            else:
+                spline.segments[i + 1].start_control_point = find_opposite_point(
+                    spline.segments[i].end_control_point, 
+                    spline.segments[i].end_point,
+                    spline.segments[i + 1].start_control_point, 
+                    math)
+
+
+def handle_user_input(pygame, user_input, window, splines, math):
     mouse = parse_mouse(user_input)
     keys = parse_keyboard(user_input)
     check_hot_key_toggle(window, keys, pygame)
     branch_input(mouse, keys, user_input, splines, pygame)
+    snap_spline_start_to_ends(splines)
+    snap_control_to_opposing_angles(splines, math)
     user_input.previous_input.mouse = mouse
     user_input.previous_input.keys = keys
 
