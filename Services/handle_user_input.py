@@ -247,7 +247,6 @@ def snap_control_to_opposing_angles(splines, math):
                     spline.segments[i + 1].start_control_point, 
                     math)
 
-
 def handle_user_input(pygame, user_input, window, splines, math):
     mouse = parse_mouse(user_input)
     keys = parse_keyboard(user_input)
