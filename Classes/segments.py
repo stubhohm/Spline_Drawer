@@ -7,7 +7,7 @@ class Segment:
             start_control_point = [0,0],
             end_point = [0,0],
             end_control_point = [0,0],
-            segment_color = WHITE,
+            segment_color = INIT_LINE_COLOR,
             segment_thickness = INIT_LINE_THICKNESS,
             start_control_point_color = INIT_START_CONTROL_POINT_COLOR,
             start_control_point_size = INIT_POINT_SIZE,

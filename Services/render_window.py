@@ -24,33 +24,45 @@ def draw_text(display, text, font, color, h_align, v_align, x, y):
 
 def display_edit_mode(user_input, font, Window):
     text = "Edit Mode:"
+    color = WHITE
     if user_input.edit_mode == EditMode.Add:
         text += " Add"
+        color = BLUE
     if user_input.edit_mode == EditMode.Select:
         text += " Selection"
+        color = WHITE
     if user_input.edit_mode == EditMode.Delete:
         text += " Delete"
-    draw_text(Window.display, text, font, WHITE, "right", "top", Window.width, 0)
+        color = RED
+    draw_text(Window.display, text, font, color, "right", "top", Window.width, 0)
 
 def display_selection_mode(user_input, font, Window):
     text = "Selction Mode:"
+    color = WHITE
     if user_input.selection_mode == SelectionMode.control_points:
         text += " Control Points"
+        color = BLUE
     if user_input.selection_mode == SelectionMode.end_points:
         text += " End Points"
+        color = WHITE
     if user_input.selection_mode == SelectionMode.segment:
         text += " Segment"
+        color = GREEN
     if user_input.selection_mode == SelectionMode.spline:
         text += " Spline"
-    draw_text(Window.display, text, font, WHITE, "right", "top", Window.width, Window.height * 1 /64)
+        color = RED
+    draw_text(Window.display, text, font, color, "right", "top", Window.width, Window.height * 1 /64)
 
 def display_print_mode(user_input, font, Window):
     text = "Print Mode:"
+    color = WHITE
     if user_input.print_mode == PrintMode.Relative:
         text += " Relative"
+        color = BLUE
     elif user_input.print_mode == PrintMode.Absolute:
         text += " Absolute"
-    draw_text(Window.display, text, font, WHITE, "right", "top", Window.width, Window.height * 2 /64)
+        color = RED
+    draw_text(Window.display, text, font, color, "right", "top", Window.width, Window.height * 2 /64)
 
 def display_edit_hotkeys(Window, font):
     text = "Show Hot Keys: H"
